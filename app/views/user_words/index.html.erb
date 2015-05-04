@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing User Words</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_words.each do |user_word| %>
+      <tr>
+        <td><%= link_to 'Show', user_word %></td>
+        <td><%= link_to 'Edit', edit_user_word_path(user_word) %></td>
+        <td><%= link_to 'Destroy', user_word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User word', new_user_word_path %>
