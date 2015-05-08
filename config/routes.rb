@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
-  resources :words
+
+  resources :user_words
   resources :players do
     resources :user_words
     resources :games
+    resources :sentences
   end
 
+  get '/user_words/get_word/:id' => 'user_words#show'
+  post '/players/:player_id/words/:word' =>'players#add_word_to_bank'
   get '/words/check_this/:word' => 'words#check'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

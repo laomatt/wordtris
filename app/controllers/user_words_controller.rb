@@ -4,12 +4,17 @@ class UserWordsController < ApplicationController
   # GET /user_words
   # GET /user_words.json
   def index
-    @user_words = UserWord.all
+    @user_words = Player.find(params[:player_id]).user_words
+    p 'd'*90
+    p @user_words
+    render :json => @user_words
   end
 
   # GET /user_words/1
   # GET /user_words/1.json
   def show
+    word=UserWord.find(params[:id])
+    render :json => word
   end
 
   # GET /user_words/new
@@ -54,11 +59,11 @@ class UserWordsController < ApplicationController
   # DELETE /user_words/1
   # DELETE /user_words/1.json
   def destroy
-    @user_word.destroy
-    respond_to do |format|
-      format.html { redirect_to user_words_url, notice: 'User word was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    word=UserWord.find(params[:id])
+    word_back=word
+    word.destroy
+    render :json => word_back
+
   end
 
   private

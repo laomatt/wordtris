@@ -19,8 +19,6 @@ class WordsController < ApplicationController
 
   def check
     result = Word.exists?(name:params[:word])
-    p 't'*90
-    p result
     render :json => {outcome: result}
   end
 

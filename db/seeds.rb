@@ -13,4 +13,8 @@ dictionary.each do |word|
 Word.create(name:word)
 end
 
-Player.create(name:'Matt')
+matt = Player.create(name:'Matt')
+
+game = Game.create()
+
+matt.games << game

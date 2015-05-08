@@ -7,6 +7,29 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<div id="instructions-id" class="instructions">
+
+<b>Instructions:</b><br>
+1.)Select a letter on the board<br>
+2.)Select adjacent letters to your selection to form a word<br>
+3.)Keep selecting adjacent letters (you may select any number of letters that are connected on the board)<br>
+4.)When you think you've formed a word, click it on top, or press 'enter' key.<br>
+5.)If you get stuck, hit the 'backspace/delete' key to cancel current word.<br>
+<br>
+--Hitting the juMBle button on top strts a new game<br>
+<b>RUles:</b><br>
+
+<li>Stamps -  <br>
+<img src="../../app/assets/images/jumbleme.png" width="50px"><br>
+  a "JuMbLe mE!" stamp jumbles the board and keeps your score.<br>
+<img src="images/jumgeddon.png" width="50px"><br>
+   a 'JUMBLEGGEDON!' stamp will remove the letters in 'JUMBLE' from the board.</li>
+<li>Any vowel on the board may be switched out for a new letter by selecting it and pressing 'enter'</li>
+
+<a href="#" class="hide-rules-modal">Hide Instructions</a>
+
+</div>
+
 
 <%= yield %>
 

@@ -154,6 +154,7 @@ var scamble = function(){
           if(ten<=64)
           {
             document.getElementById(random_animation[ten]).style.color=current_color
+            document.getElementById(curr[t]).className="letter"
             document.getElementById(random_animation[ten]).innerHTML=alpha[Math.floor(Math.random()*alpha.length)]
             shake(random_animation[ten])
             ten+=1

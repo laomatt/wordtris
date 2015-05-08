@@ -10,6 +10,7 @@ class PlayersController < ApplicationController
   # GET /players/1
   # GET /players/1.json
   def show
+
   end
 
   # GET /players/new
@@ -21,8 +22,19 @@ class PlayersController < ApplicationController
   def edit
   end
 
-  # POST /players
-  # POST /players.json
+  def add_word_to_bank
+    player = Player.find(params[:player_id])
+    uword = UserWord.create(name:params[:word])
+    player.user_words << uword
+    render :json => player.user_words
+  end
+
+  def player_sentence_list
+    player = Player.find(params[:player_id])
+
+    render :json => player.sentences
+  end
+
   def create
     @player = Player.new(player_params)
 
@@ -51,14 +63,13 @@ class PlayersController < ApplicationController
     end
   end
 
+
+
   # DELETE /players/1
   # DELETE /players/1.json
   def destroy
-    @player.destroy
-    respond_to do |format|
-      format.html { redirect_to players_url, notice: 'Player was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+
+
   end
 
   private
@@ -71,4 +82,4 @@ class PlayersController < ApplicationController
     def player_params
       params[:player]
     end
-end
+  end

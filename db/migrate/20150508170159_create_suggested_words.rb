@@ -1,7 +1,6 @@
-class CreateUserWords < ActiveRecord::Migration
+class CreateSuggestedWords < ActiveRecord::Migration
   def change
-    create_table :user_words do |t|
-      t.references :player
+    create_table :suggested_words do |t|
       t.string :name
       t.string :definition
 

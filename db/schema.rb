@@ -11,9 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150504172538) do
+ActiveRecord::Schema.define(version: 20150508170159) do
 
   create_table "games", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -24,12 +26,38 @@ ActiveRecord::Schema.define(version: 20150504172538) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_words", force: :cascade do |t|
-    t.integer  "user_id"
+  create_table "sentences", force: :cascade do |t|
+    t.integer  "player_id"
+    t.string   "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "suggested_words", force: :cascade do |t|
     t.string   "name"
     t.string   "definition"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_words", force: :cascade do |t|
+    t.integer  "player_id"
+    t.string   "name"
+    t.string   "definition"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.integer  "sentence_id"
+    t.integer  "player_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "votes_tables", force: :cascade do |t|
+    t.integer "sentence_id"
+    t.integer "player_id"
   end
 
   create_table "words", force: :cascade do |t|
