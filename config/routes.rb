@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+get '/sentences' => 'sentences#list_all_sentences'
+post '/players/:player_id/suggest/:word' => 'suggested_words#create'
 
   resources :user_words
   resources :players do

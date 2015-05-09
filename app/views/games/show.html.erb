@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 
-<body onload="load()" onkeypress="return_button(event)">
+<body onkeypress="return_button(event)">
   <center><div id="word">score +3pts</div></center>
 <div id="wrapper">
 
@@ -14,7 +14,7 @@
 </div>
 
 <div id="podium" class="UI"></div>
-<div id="player_info" id2="<%= params[:id]%>">Welcome <%= @user.name %></div>
+<div id="player_info" id2="<%= params[:player_id]%>" id_game="<%= params[:id]%>">Welcome <%= @user.name %></div>
 
 
 <div id="center">
@@ -88,8 +88,10 @@
   <div class="letter" id="87" x="25" y="70"></div>
   <div class="letter" id="88" x="20" y="70"></div>
 </div>
-<div id="cprize" class="cprize">find words!</div>
-<hr>
+<div id="cprize" class="cprize">find words!
+<a href="#" class="user_word_list_item">afasdf</a>
+</div>
+
 
 <div class="sen_con" id="sen_con">
 <div class="current_sentence" id="current_sentence">USE WORDS FROM YOUR WORD BANK TO FORM SENTENCES</div>
@@ -105,8 +107,8 @@
 
 
 <div class="sentences">
- <center> <a class="sen_link your_sentences_link" href="#">Your sentences</a>|
-  <a class="sen_link community_sentences_link" href="#">Community</a></center>
+  <a class="sen_link your_sentences_link" href="#">Your sentences</a>|
+  <a class="sen_link community_sentences_link" href="#">Community</a>
 <hr>
   <div class="sentences personal_sentences" id="personal_sentences"></div>
   <div class="sentences community_sentences" id="community_sentences"></div>
@@ -122,7 +124,7 @@
 <script id="player-word-template" type="text/x-handlebars-template">
   {{#each user_words}}
 
-  <a class="user_word_list" id="user_word{{id}}" id2="{{id}}" href="{{id}}">{{name}}</a>
+  <a class="user_word_list_item" id="user_word{{id}}" href="#">{{name}}</a>
 
   {{/each}}
 </script>
@@ -131,10 +133,27 @@
 <script id="sentence-template" type="text/x-handlebars-template">
   {{#each sentences}}
 
-    <li class="sen_list_item" id="sen_list_item{{id}}" id2="{{id}}">
+    <li class="sen_list_item" id="sen_list_item{{id}}">
     {{content}}
    - {{votes.count}}
     </li>
+<hr>
 
+  {{/each}}
+</script>
+
+<script id="sentence-template-comm" type="text/x-handlebars-template">
+  {{#each sentences}}
+
+    <li class="sen_list_item" id="sen_comm_list_item{{id}}">
+    {{content}}
+   - {{votes_count}} <br>
+   submited by: {{player_name}}
+
+   <div class="up-down-votes">
+<a href="">+1</a> ||
+   </div>
+    </li>
+<hr>
   {{/each}}
 </script>

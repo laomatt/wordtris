@@ -4,7 +4,7 @@
 
 var sentence_as=""
 var sen_array=[]
-
+var temp_word=""
 
 
 var alpha="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("")
@@ -37,8 +37,8 @@ var current_color="white";
 var colors=["white", "#E6E0F8", "#E0F8F7", "#ECF6CE","#F5F6CE","#CEE3F6","#8FFDEB","#FDBB8F","#E2FD8F","#CD8FFD"]
 
 var time_inc=0
-var load = function(){
-// function load(){
+// var load = function(){
+function load(){
 
   if(time_inc<64){
     td=document.getElementById(ID_array[time_inc])
@@ -62,46 +62,6 @@ var load = function(){
     time_inc+=1
     setTimeout(load,20)
   }
-//populate the word bank with the current players words
-$.ajax({
-  url: '/players/'+ $('#player_info').attr('id2')+'/user_words',
-})
-.done(function(data) {
-  var context = { user_words: data };
-  var source = $('#player-word-template').html();
-  var template = Handlebars.compile(source);
-  var html = template(context);
-  document.getElementById('wordbank').innerHTML=html
-
-})
-.fail(function() {
-  console.log("error");
-})
-.always(function() {
-});
-
-
-//populates user sentences
-
-$.ajax({
-  url: '/players/'+$('#player_info').attr('id2')+'/sentences',
-})
-.done(function(data) {
-  var context = { sentences: data };
-  var source = $('#sentence-template').html();
-  var template = Handlebars.compile(source);
-  var html = template(context);
-  document.getElementById('personal_sentences').innerHTML=html
-
-})
-.fail(function() {
-  console.log("error");
-})
-.always(function() {
-});
-
-
-
 }
 
 function reset_colors(){
@@ -138,9 +98,7 @@ var submit = function(){
       hit_noise.play()
       used_words.push(""+word+"")
       new_score = player_score+word.length
-      // document.getElementById("wordbank").innerHTML=used_words.reverse().join(", ")
 
-// $('#player_info').attr('id2')
 // here we assign the valid word to the current player.
 $.ajax({
   url: '/players/'+ $('#player_info').attr('id2') +'/words/'+word,
@@ -156,14 +114,10 @@ $.ajax({
         var html = template(context);
         document.getElementById('wordbank').innerHTML=html
       })
-.fail(function() {
-  console.log("error");
-})
-.always(function() {
-  console.log("complete");
-});
+
         //make this fade out
         document.getElementById("word").innerHTML="Score! +"+word.length+"pts"
+
         // debugger
         $("#word").css("right",""+$("#"+curr[curr.length-1]).attr('x')+"%")
         $("#word").css("top",""+$("#"+curr[curr.length-1]).attr('y')+"%")
@@ -171,8 +125,19 @@ $.ajax({
         setTimeout(function(){
           $("#word").fadeOut(2500);
         })
+
         slide_score()
-        generate_free_jumbles()
+
+        $.ajax({
+          url: '/players/'+$('#player_info').attr('id2')+'/games/'+$('#player_info').attr('id_game'),
+          type: 'PATCH',
+          data: {score: new_score},
+        })
+        .done(function(data) {
+          console.log(data);
+        })
+
+        // generate_free_jumbles()
         for (var t = 0; t < curr.length; t++)
         {
           document.getElementById(curr[t]).innerHTML=""
@@ -225,6 +190,8 @@ $.ajax({
       {
         for (var tea = 0; tea < curr.length; tea++)
         {
+          temp_word=word
+          $("#cprize").css('display','block');
           document.getElementById("cprize").innerHTML=word+" is not a word :( <a class='suggest-word-link' href='#'>suggest this word</a>"
             document.getElementById(curr[tea]).className="letter"
             document.getElementById(ID_array[tea]).style.color=current_color
@@ -250,29 +217,75 @@ $.ajax({
 
 $(document).on("page:change",function(){
 
-  $('body').on('click', '.user_word_list', function(event) {
-    event.preventDefault();
-    id=$(this).attr('id2')
-    $.ajax({
-      url: '/user_words/get_word/'+$(this).attr('id2')
-    })
-    .done(function(data) {
-      console.log(data);
-      sentence_as+=data.name+" "
-      sen_array.push(data)
-      $("#current_sentence").text(sentence_as)
-      $("#user_word"+id).remove()
-      $('.sen_con').css('display','block')
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    });
+load()
 
 
-  });
+
+//populate the word bank with the current players words
+$.ajax({
+  url: '/players/'+ $('#player_info').attr('id2')+'/user_words',
+})
+.done(function(data) {
+  var context = { user_words: data };
+  var source = $('#player-word-template').html();
+  var template = Handlebars.compile(source);
+  var html = template(context);
+  // document.getElementById('wordbank').innerHTML=html
+  $('#wordbank').html(html)
+})
+
+
+$(document).on('click', '.user_word_list_item', function(event) {
+  event.preventDefault();
+  console.log('worked!');
+});
+
+//populates user sentences
+
+$.ajax({
+  url: '/players/'+$('#player_info').attr('id2')+'/sentences',
+})
+.done(function(data) {
+  var context = { sentences: data };
+  var source = $('#sentence-template').html();
+  var template = Handlebars.compile(source);
+  var html = template(context);
+  document.getElementById('personal_sentences').innerHTML=html
+
+})
+
+
+//populates community sentences
+$.ajax({
+  url: '/sentences',
+})
+.done(function(data) {
+  var context = { sentences: data };
+  var source = $('#sentence-template-comm').html();
+  var template = Handlebars.compile(source);
+  var html = template(context);
+  document.getElementById('community_sentences').innerHTML=html
+})
+
+
+
+  // $('body').on('click','.user_word_list_item',function(event) {
+  //   // debugger
+  //   event.preventDefault();
+  //   var id=$(this).attr('id2')
+  //   $.ajax({
+  //     url: '/user_words/get_word/'+$(this).attr('id2')
+  //   })
+  //   .done(function(data) {
+  //     console.log(data);
+  //     sentence_as+=data.name+" "
+  //     sen_array.push(data)
+  //     $("#current_sentence").text(sentence_as)
+  //     $("#user_word"+id).remove()
+  //     $('.sen_con').css('display','block')
+  //   })
+
+  // });
 
 
 
@@ -315,39 +328,51 @@ $('body').on('click', '.sub_sen', function(event) {
     type: 'POST',
     data: {content: $('#current_sentence').text()},
   })
-  .done(function(data) {
+  .done(function(data){
     var context = { sentences: data };
     var source = $('#sentence-template').html();
     var template = Handlebars.compile(source);
     var html = template(context);
-    for(var g in sen_array){
-      // sen_array[g].id
-      $.ajax({
-        url: '/players/'+$('#player_info').attr('id2')+'/user_words/'+sen_array[g].id,
-        type: 'DELETE',
-      })
-      .done(function() {
-        console.log("success");
-      })
-      .fail(function() {
-        console.log("error");
-      })
-      .always(function() {
-        console.log("complete");
-      });
-
-    }
     document.getElementById('personal_sentences').innerHTML=html
+/*
+Here might be a good place to look up implementing the pusher gem so that sentences in the community div are updated as soon as someone creates a sentence.
+*/
+
+      // for(var g in sen_array){
+      //   $.ajax({
+      //     url: '/players/'+$('#player_info').attr('id2')+'/user_words/'+sen_array[g].id,
+      //     type: 'DELETE',
+      //   })
+      //   .done(function() {
+      //   })
+      // }
     setTimeout(function(){
       $("#sen_con").fadeOut(1500);
     })
-  })
-  .fail(function() {
-    console.log("error");
-  })
-  .always(function() {
-    console.log("complete");
-  });
+
+  })//closes line 338
+
+}); //closes line 331
+//
+// cancel sentence
+$('body').on('click', '.can_sen', function(event) {
+  event.preventDefault();
+  setTimeout(function(){
+      $("#sen_con").fadeOut(1500);
+    })
+$('#current_sentence').text('')
+
+$.ajax({
+  url: '/players/'+ $('#player_info').attr('id2')+'/user_words',
+})
+.done(function(data) {
+  var context = { user_words: data };
+  var source = $('#player-word-template').html();
+  var template = Handlebars.compile(source);
+  var html = template(context);
+  document.getElementById('wordbank').innerHTML=html
+})
+
 
 });
 
@@ -357,14 +382,35 @@ $('body').on('click', '.your_sentences_link', function(event) {
   event.preventDefault();
   $('#personal_sentences').css('z-index','6')
   $('#community_sentences').css('z-index','5')
-}
+})
 
 
 $('body').on('click', '.community_sentences_link', function(event) {
   event.preventDefault()
   $('#personal_sentences').css('z-index','5')
   $('#community_sentences').css('z-index','6')
-}
+})
 
+
+
+
+//suggest a word
+
+$('body').on('click', '.suggest-word-link', function(event) {
+  event.preventDefault();
+  /* Act on the event */
+  $.ajax({
+    url: '/players/'+$('#player_info').attr('id2')+'/suggest/'+temp_word,
+    type: 'POST',
+  })
+  .done(function() {
+    $("#cprize").text("  Word suggested  !Thank you!  ")
+    setTimeout(function(){
+      $("#cprize").fadeOut(2500);
+    })
+  })
+
+
+});
 })
 

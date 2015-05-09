@@ -11,7 +11,11 @@ def index
 end
 
 def list_all_sentences
-  render :json => Sentence.all
+  output=[]
+Sentence.all.each do |sentence|
+  output << {id:sentence.id , player_name:Player.find(sentence.player_id).name, vote_count:sentence.votes.count, content:sentence.content}
+end
+  render :json => output
 end
 
   def destroy
