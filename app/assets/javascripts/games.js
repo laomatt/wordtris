@@ -38,51 +38,52 @@ var colors=["white", "#E6E0F8", "#E0F8F7", "#ECF6CE","#F5F6CE","#CEE3F6","#8FFDE
 
 var time_inc=0
 // var load = function(){
-function load(){
+  function load(){
 
-  if(time_inc<64){
-    td=document.getElementById(ID_array[time_inc])
-    td.innerHTML=alpha[Math.floor(Math.random()*alpha.length)]
-    td.addEventListener("click",function(){
-      if(((current=="")||(parseInt(current)+1==parseInt(this.id))||(parseInt(current)-1==parseInt(this.id))||(parseInt(current)+10==parseInt(this.id))||(parseInt(current)-10==parseInt(this.id))||((parseInt(current)-9==parseInt(this.id)))||((parseInt(current)-11==parseInt(this.id)))||((parseInt(current)+9==parseInt(this.id)))||((parseInt(current)+11==parseInt(this.id))))&&(curr.indexOf(this.id)<0))
-      {
-        this.className="letter pushed"
-        word+=this.innerHTML
-        current=this.id
-        curr.push(this.id)
-        document.getElementById("word").innerHTML=word
+
+    if(time_inc<64){
+      td=document.getElementById(ID_array[time_inc])
+      td.innerHTML=alpha[Math.floor(Math.random()*alpha.length)]
+      td.addEventListener("click",function(){
+        if(((current=="")||(parseInt(current)+1==parseInt(this.id))||(parseInt(current)-1==parseInt(this.id))||(parseInt(current)+10==parseInt(this.id))||(parseInt(current)-10==parseInt(this.id))||((parseInt(current)-9==parseInt(this.id)))||((parseInt(current)-11==parseInt(this.id)))||((parseInt(current)+9==parseInt(this.id)))||((parseInt(current)+11==parseInt(this.id))))&&(curr.indexOf(this.id)<0))
+        {
+          this.className="letter pushed"
+          word+=this.innerHTML
+          current=this.id
+          curr.push(this.id)
+          document.getElementById("word").innerHTML=word
         // debugger
         $("#word").css("right",""+(parseInt($("#"+curr[curr.length-1]).attr('x'))+15)+"%")
         $("#word").css("top",""+$("#"+curr[curr.length-1]).attr('y')+"%")
         $("#word").css("display","block")
       }
     })
-    shake_side_ways(ID_array[time_inc])
-    document.getElementById('podium').innerHTML="STAMPs <br>"+jumbles_array.join("")+arma_array.join("")
-    time_inc+=1
-    setTimeout(load,20)
-  }
-}
-
-function reset_colors(){
-  word=""
-  curr=[]
-  current=""
-  document.getElementById("word").innerHTML=word
-  for (var t = 0; t < 64; t++)
-  {
-    document.getElementById(ID_array[t]).style.color=current_color
+      shake_side_ways(ID_array[time_inc])
+      document.getElementById('podium').innerHTML="STAMPs <br>"+jumbles_array.join("")+arma_array.join("")
+      time_inc+=1
+      setTimeout(load,20)
+    }
   }
 
-}
-var first_row=["81","82","83","84","85","86","87","88"]
-var last_row=["11","12","13","14","15","16","17","18"]
-var used_words=[];
+  function reset_colors(){
+    word=""
+    curr=[]
+    current=""
+    document.getElementById("word").innerHTML=word
+    for (var t = 0; t < 64; t++)
+    {
+      document.getElementById(ID_array[t]).style.color=current_color
+    }
 
-var jumbles_array=[]
-var arma_array=[]
+  }
+  var first_row=["81","82","83","84","85","86","87","88"]
+  var last_row=["11","12","13","14","15","16","17","18"]
+  var used_words=[];
 
-var new_score=0;
+  var jumbles_array=[]
+  var arma_array=[]
+
+  var new_score=0;
 
 //this function runs when a word is submitted
 var submit = function(){
@@ -101,7 +102,7 @@ var submit = function(){
 
 // here we assign the valid word to the current player.
 $.ajax({
-  url: '/players/'+ $('#player_info').attr('id2') +'/words/'+word,
+  url: '/players/'+ $('#player_info').attr('id_player') +'/words/'+word,
   type: 'POST',
 })
 .done(function(data) {
@@ -129,7 +130,7 @@ $.ajax({
         slide_score()
 
         $.ajax({
-          url: '/players/'+$('#player_info').attr('id2')+'/games/'+$('#player_info').attr('id_game'),
+          url: '/players/'+$('#player_info').attr('id_player')+'/games/'+$('#player_info').attr('id_game'),
           type: 'PATCH',
           data: {score: new_score},
         })
@@ -152,7 +153,7 @@ $.ajax({
       else if((word.length==1)&&(data.outcome))
       {
         $.ajax({
-          url: '/players/'+ $('#player_info').attr('id2') +'/words/'+word,
+          url: '/players/'+ $('#player_info').attr('id_player') +'/words/'+word,
           type: 'POST',
         })
         .done(function(data) {
@@ -215,35 +216,30 @@ $.ajax({
 
 
 
-$(document).on("page:change",function(){
+$(document).on("ready",function(){
 
-load()
+  load()
 
+  $('body').keypress(return_button);
 
 
 //populate the word bank with the current players words
 $.ajax({
-  url: '/players/'+ $('#player_info').attr('id2')+'/user_words',
+  url: '/players/'+ $('#player_info').attr('id_player')+'/user_words',
 })
 .done(function(data) {
   var context = { user_words: data };
   var source = $('#player-word-template').html();
   var template = Handlebars.compile(source);
   var html = template(context);
-  // document.getElementById('wordbank').innerHTML=html
-  $('#wordbank').html(html)
+  document.getElementById('wordbank').innerHTML=html
+  // $('#wordbank').html(html)
 })
-
-
-$(document).on('click', '.user_word_list_item', function(event) {
-  event.preventDefault();
-  console.log('worked!');
-});
 
 //populates user sentences
 
 $.ajax({
-  url: '/players/'+$('#player_info').attr('id2')+'/sentences',
+  url: '/players/'+$('#player_info').attr('id_player')+'/sentences',
 })
 .done(function(data) {
   var context = { sentences: data };
@@ -251,7 +247,6 @@ $.ajax({
   var template = Handlebars.compile(source);
   var html = template(context);
   document.getElementById('personal_sentences').innerHTML=html
-
 })
 
 
@@ -269,23 +264,21 @@ $.ajax({
 
 
 
-  // $('body').on('click','.user_word_list_item',function(event) {
-  //   // debugger
-  //   event.preventDefault();
-  //   var id=$(this).attr('id2')
-  //   $.ajax({
-  //     url: '/user_words/get_word/'+$(this).attr('id2')
-  //   })
-  //   .done(function(data) {
-  //     console.log(data);
-  //     sentence_as+=data.name+" "
-  //     sen_array.push(data)
-  //     $("#current_sentence").text(sentence_as)
-  //     $("#user_word"+id).remove()
-  //     $('.sen_con').css('display','block')
-  //   })
-
-  // });
+$('body').on('click','a.user_word_list_item',function(event) {
+  event.preventDefault();
+  var id=$(this).attr('id2')
+  $.ajax({
+    url: '/user_words/get_word/'+$(this).attr('id2')
+  })
+  .done(function(data) {
+    console.log(data);
+    sentence_as+=data.name+" "
+    sen_array.push(data)
+    $("#current_sentence").text(sentence_as)
+    $("#user_word"+id).remove()
+    $('.sen_con').css('display','block')
+  })
+});
 
 
 
@@ -324,11 +317,12 @@ $("body").on('mouseout', '.sen_con', function(event) {
 $('body').on('click', '.sub_sen', function(event) {
   event.preventDefault();
   $.ajax({
-    url: '/players/'+$('#player_info').attr('id2')+'/sentences',
+    url: '/players/'+$('#player_info').attr('id_player')+'/sentences',
     type: 'POST',
     data: {content: $('#current_sentence').text()},
   })
   .done(function(data){
+    $('#current_sentence').text("")
     var context = { sentences: data };
     var source = $('#sentence-template').html();
     var template = Handlebars.compile(source);
@@ -338,55 +332,65 @@ $('body').on('click', '.sub_sen', function(event) {
 Here might be a good place to look up implementing the pusher gem so that sentences in the community div are updated as soon as someone creates a sentence.
 */
 
-      // for(var g in sen_array){
-      //   $.ajax({
-      //     url: '/players/'+$('#player_info').attr('id2')+'/user_words/'+sen_array[g].id,
-      //     type: 'DELETE',
-      //   })
-      //   .done(function() {
-      //   })
-      // }
-    setTimeout(function(){
-      $("#sen_con").fadeOut(1500);
-    })
+for(var g in sen_array){
+  $.ajax({
+    url: '/players/'+$('#player_info').attr('id_player')+'/user_words/'+sen_array[g].id,
+    type: 'DELETE',
+  })
+  .done(function() {
+  })
+}
+setTimeout(function(){
+  $("#sen_con").fadeOut(1500);
+})
 
   })//closes line 338
-
+ $('#current_sentence').text("")
+  sentence_as=" "
+  sen_array=[]
 }); //closes line 331
 //
+
+
+
 // cancel sentence
 $('body').on('click', '.can_sen', function(event) {
   event.preventDefault();
+
   setTimeout(function(){
-      $("#sen_con").fadeOut(1500);
-    })
-$('#current_sentence').text('')
+    $("#sen_con").fadeOut(1500);
+  })
 
-$.ajax({
-  url: '/players/'+ $('#player_info').attr('id2')+'/user_words',
-})
-.done(function(data) {
-  var context = { user_words: data };
-  var source = $('#player-word-template').html();
-  var template = Handlebars.compile(source);
-  var html = template(context);
-  document.getElementById('wordbank').innerHTML=html
-})
 
+  $.ajax({
+    url: '/players/'+ $('#player_info').attr('id_player')+'/user_words',
+  })
+  .done(function(data) {
+    var context = { user_words: data };
+    var source = $('#player-word-template').html();
+    var template = Handlebars.compile(source);
+    var html = template(context);
+    document.getElementById('wordbank').innerHTML=html
+  })
+  $('#current_sentence').text("")
+  sentence_as=" "
+  sen_array=[]
 
 });
 
 
 //toggle sentences
-$('body').on('click', '.your_sentences_link', function(event) {
-  event.preventDefault();
+$('body').on('click', 'button.your_sentences_link', function(event) {
+  // event.preventDefault();
+  console.log("ldkjfsa")
   $('#personal_sentences').css('z-index','6')
   $('#community_sentences').css('z-index','5')
 })
 
 
-$('body').on('click', '.community_sentences_link', function(event) {
-  event.preventDefault()
+$('body').on('click', 'button.community_sentences_link', function(event) {
+  // event.preventDefault()
+  console.log("ldkjfsa")
   $('#personal_sentences').css('z-index','5')
   $('#community_sentences').css('z-index','6')
 })
@@ -400,7 +404,7 @@ $('body').on('click', '.suggest-word-link', function(event) {
   event.preventDefault();
   /* Act on the event */
   $.ajax({
-    url: '/players/'+$('#player_info').attr('id2')+'/suggest/'+temp_word,
+    url: '/players/'+$('#player_info').attr('id_player')+'/suggest/'+temp_word,
     type: 'POST',
   })
   .done(function() {
@@ -409,8 +413,11 @@ $('body').on('click', '.suggest-word-link', function(event) {
       $("#cprize").fadeOut(2500);
     })
   })
-
-
 });
+
+
+
 })
+
+
 

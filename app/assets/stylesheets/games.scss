@@ -360,39 +360,50 @@ a{
 }
 
 
-.personal_sentences{
-  border-style: solid;
-  border-color: #5882FA;
-  padding: 3%;
+
+.sentences{
+  position: relative;
+  top:0%;
+  font-size: 25px;
+  text-decoration: none;
+  color: black;
+  /*border-style: solid;*/
+  /*border-color: #5882FA;*/
   border-radius: 10px;
+  padding: 3%;
   background-color: white;
-  width: 100%;
   height: 90%;
+}
+.personal_sentences{
+  top: 10%;
+  position: absolute;
+  width: 100%;
   bottom: 0%;
   right: 0%;
-  z-index: 10;
+  height: 80%;
+  z-index: 6;
+  overflow: scroll;
 }
 
 .community_sentences{
-  border-style: solid;
-  border-color: #5882FA;
-  border-radius: 10px;
-  background-color: white;
+  top: 10%;
+  position: absolute;
   width: 100%;
-  height: 90%;
-  padding: 3%;
   bottom: 0%;
   right: 0%;
-
+  height: 80%;
+line-height: 40px;
+  z-index: 5;
+  overflow: scroll;
 }
 
-a.your_sentences_link{
+.your_sentences_link{
   position: relative;
   float: left;
   color: white;
 }
 
-a.community_sentences_link{
+.community_sentences_link{
   position: relative;
   float: right;
   color: white;
@@ -402,10 +413,13 @@ a.community_sentences_link{
   float: right;
 }
 
-.sentences > a:link, a:visited, a:active{
-  position: relative;
-  top:5%;
-  font-size: 25px;
-  text-decoration: none;
-  color: white;
+
+.user_word_list_item{
+  display: inline;
 }
+
+.sen_link{
+  color: black;
+  width: 50%;
+}
+

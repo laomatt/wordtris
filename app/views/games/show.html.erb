@@ -1,20 +1,21 @@
 <p id="notice"><%= notice %></p>
 
 
-<body onkeypress="return_button(event)">
+<!-- <body onkeypress="return_button(event)"> -->
   <center><div id="word">score +3pts</div></center>
 <div id="wrapper">
+<div id="wordbank" class="UI">
+
+
+</div>
 
 <a href="#" class="instructions-modal">How to play?</a>
 
 <div id="score" ></div>
 <center><div class="label">Word Bank</div></center>
-<div id="wordbank" class="UI">
-<!-- <button onclick="armageddon()">test</button> -->
-</div>
 
 <div id="podium" class="UI"></div>
-<div id="player_info" id2="<%= params[:player_id]%>" id_game="<%= params[:id]%>">Welcome <%= @user.name %></div>
+<div id="player_info" id_player="<%= params[:player_id]%>" id_game="<%= params[:id]%>">Welcome <%= @user.name %></div>
 
 
 <div id="center">
@@ -107,25 +108,19 @@
 
 
 <div class="sentences">
-  <a class="sen_link your_sentences_link" href="#">Your sentences</a>|
-  <a class="sen_link community_sentences_link" href="#">Community</a>
-<hr>
+  <button class="sen_link your_sentences_link" href="#">Your sentences</button>
+  <button class="sen_link community_sentences_link" href="#">Community</button>
   <div class="sentences personal_sentences" id="personal_sentences"></div>
   <div class="sentences community_sentences" id="community_sentences"></div>
-
-
-
 </div>
 
 </div>
-</body>
+<!-- </body> -->
 
 
 <script id="player-word-template" type="text/x-handlebars-template">
   {{#each user_words}}
-
-  <a class="user_word_list_item" id="user_word{{id}}" href="#">{{name}}</a>
-
+  <a class="user_word_list_item" id="user_word{{id}}" id2="{{id}}" href="#">{{name}}</a>
   {{/each}}
 </script>
 
@@ -151,7 +146,7 @@
    submited by: {{player_name}}
 
    <div class="up-down-votes">
-<a href="">+1</a> ||
+<a href="">+1</a>
    </div>
     </li>
 <hr>

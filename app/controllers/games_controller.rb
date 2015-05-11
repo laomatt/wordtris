@@ -11,6 +11,7 @@ class GamesController < ApplicationController
   # GET /games/1.json
   def show
     @user = Player.find(params[:id])
+    @words = @user.user_words
   end
 
   # GET /games/new
