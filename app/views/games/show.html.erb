@@ -12,6 +12,10 @@
 <a href="#" class="instructions-modal">How to play?</a>
 
 <div id="score" ></div>
+<div class="globe_updates">
+  <div class="sen_link" id="amount_sentences">0</div>
+</div>
+
 <center><div class="label">Word Bank</div></center>
 
 <div id="podium" class="UI"></div>
@@ -106,16 +110,34 @@
 </div>
 </div>
 
-
 <div class="sentences">
   <button class="sen_link your_sentences_link" href="#">Your sentences</button>
-  <button class="sen_link community_sentences_link" href="#">Community</button>
+  <button class="sen_link community_sentences_link" href="#">Community</button><br>
   <div class="sentences personal_sentences" id="personal_sentences"></div>
   <div class="sentences community_sentences" id="community_sentences"></div>
 </div>
 
 </div>
 <!-- </body> -->
+<script>
+
+  setInterval(function(){
+//check for updates
+    $.ajax({
+    url: '/sentences/count',
+          })
+          .done(function(data) {
+            console.log(data)
+              $('#amount_sentences').text(data.count)
+              for(var i in data.votes)
+              {
+                $('#sen_list_item_vote'+data.votes[i].id).text("Total votes: "+data.votes[i].count)
+              }
+          })
+      }, 1000)
+
+</script>
+
 
 
 <script id="player-word-template" type="text/x-handlebars-template">
@@ -128,10 +150,10 @@
 <script id="sentence-template" type="text/x-handlebars-template">
   {{#each sentences}}
 
-    <li class="sen_list_item" id="sen_list_item{{id}}">
-    {{content}}
-   - {{votes.count}}
-    </li>
+    <div class="sen_list_item" id="sen_list_item{{id}}">
+    ' {{content}} '
+   <br><div id="sen_list_item_vote{{id}}"> {{votes.count}}</div>
+    </div>
 <hr>
 
   {{/each}}
@@ -142,7 +164,7 @@
 
     <li class="sen_list_item" id="sen_comm_list_item{{id}}">
     {{content}}
-   - {{votes_count}} <br>
+   - <div class="sen_vote-count" id="{{id}}">{{votes_count}}</div> <br>
    submited by: {{player_name}}
 
    <div class="up-down-votes">

@@ -18,6 +18,20 @@ end
   render :json => output
 end
 
+
+def count_comm_sen
+  @num = Sentence.count
+  @votes_hash=[]
+  Sentence.all.each do |sentence|
+    temp={id:sentence.id, count:sentence.votes.count}
+    @votes_hash << temp
+    # @votes_hash[sentence.id]=sentence.votes.count
+  end
+
+  render :json => {count: @num, votes:@votes_hash}
+
+end
+
   def destroy
 
   end

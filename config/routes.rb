@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 get '/sentences' => 'sentences#list_all_sentences'
 post '/players/:player_id/suggest/:word' => 'suggested_words#create'
+get 'sentences/count' => 'sentences#count_comm_sen'
+
 
   resources :user_words
   resources :players do
@@ -16,7 +18,7 @@ post '/players/:player_id/suggest/:word' => 'suggested_words#create'
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'players#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
