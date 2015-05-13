@@ -121,20 +121,20 @@
 <!-- </body> -->
 <script>
 
-  setInterval(function(){
-//check for updates
-    $.ajax({
-    url: '/sentences/count',
-          })
-          .done(function(data) {
-            console.log(data)
-              $('#amount_sentences').text(data.count)
-              for(var i in data.votes)
-              {
-                $('#sen_list_item_vote'+data.votes[i].id).text("Total votes: "+data.votes[i].count)
-              }
-          })
-      }, 1000)
+//   setInterval(function(){
+// //check for updates
+//     $.ajax({
+//     url: '/sentences/count',
+//           })
+//           .done(function(data) {
+//             console.log(data)
+//               $('#amount_sentences').text(data.count)
+//               for(var i in data.votes)
+//               {
+//                 $('#sen_list_item_vote'+data.votes[i].id).text("Total votes: "+data.votes[i].count)
+//               }
+//           })
+//       }, 1000)
 
 </script>
 
